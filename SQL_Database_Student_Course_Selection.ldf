@@ -1,0 +1,334 @@
+# Student course selection - database
+use master
+if exists(select * from sysdatabases where name = 'Database of course selection')
+Drop database Database of course selection
+go
+create database Database of course selection'
+On primary 
+(name=Student_data,filename='D:\Database of course selection\course?.mdf',size=10,maxsize=unlimited,filegrowth=10%)
+Log on 
+(name=Student_log,filename='D:\Database of course selection\course
+.ldf',size=3,maxsize=10,filegrowth=1)
+go
+use Database of course selection
+create table Student  
+(Sno char(10) primary key,Sname char(20)unique,Ssex char(2),Sage int,Sdept char(20));
+go
+create table Course
+(Cno char(4) primary key,Cname char(10),Credit smallint);
+go
+create table SC
+(Sno char(10),Cno char(4),Grade int,Primary key(Sno,Cno),
+foreign key (Sno)references Student(Sno),
+foreign key (Cno) references Course(Cno));
+
+alter table Course
+alter column Cname char(20)
+
+INSERT INTO Student   VALUES ('12340','John','Male','18','computer science');
+INSERT INTO Student   VALUES ('12341','Lily','female','19','computer science');
+INSERT INTO Student   VALUES ('12342','Bob','male','17','math');
+INSERT INTO Student   VALUES ('12343','Marry','female','18','art');
+INSERT INTO Student   VALUES ('12344','George','male','19','finance');
+INSERT INTO Student   VALUES ('12345','Rose','female','20','law');
+INSERT INTO Student   VALUES ('12346','Mike','male','18','finance');
+INSERT INTO Student   VALUES ('12347','Cindy','female','17','art');
+INSERT INTO Student   VALUES ('12348','Frank','male','18','politics');
+INSERT INTO Student   VALUES ('12349','Will','male','19',' computer science');
+
+
+insert into Course  values('0002','civil law' ,2);
+insert into Course  values('0003','computer science and media' ,2);
+insert into Course  values('0004','movie appreciation' ,2);
+insert into Course  values('0005','Introduction to World famous Works' ,2);
+insert into Course  values('0006','Statistics' ,2);
+insert into Course  values('0007',' microeconomics' ,2);
+insert into Course  values('0008',' calculus' ,2);
+insert into Course  values('0009',' ballet' ,5);
+insert into Course  values('0010',' mobile app design and development ' ,2);
+
+
+INSERT   INTO SC(Sno,Cno,Grade)    VALUES ('12340','0008',98);
+INSERT   INTO SC(Sno,Cno,Grade)    VALUES ('12340','0010',87);
+INSERT   INTO SC(Sno,Cno,Grade)    VALUES ('12342','0006',89);
+INSERT   INTO SC(Sno,Cno,Grade)    VALUES ('12342','0009',99);
+INSERT   INTO SC(Sno,Cno,Grade)    VALUES ('12344','0007',89);
+INSERT   INTO SC(Sno,Cno,Grade)    VALUES ('12345','0002',88);
+INSERT   INTO SC(Sno,Cno,Grade)    VALUES ('12346','0007',96);
+INSERT   INTO SC(Sno,Cno,Grade)    VALUES ('12347','0004',89);
+INSERT   INTO SC(Sno,Cno,Grade)    VALUES ('12348','0005',100);
+INSERT   INTO SC(Sno,Cno,Grade)    VALUES ('12349','0003',94);
+
+SELECT Sno,Sname
+	FROM Student;
+
+SELECT Sname,Sno,Sdept
+	FROM Student;
+
+SELECT  Sno,Sname,Ssex,Sage,Sdept 
+	FROM Student;
+
+SELECT  *
+	FROM Student;
+
+SELECT Sname,year(getdate())-Sage
+FROM Student;
+
+SELECT Sname,'Year of Birth: ',year(getdate())-Sage,LOWER(Sdept)
+FROM Student;
+
+SELECT Sname NAME,'Year of Birth: 'BIRTH,2015-Sage BIRTHDAY,LOWER(Sdept)DEPARTMENT
+FROM Student;
+
+SELECT Sno
+FROM SC;
+
+
+SELECT DISTINCT Sno  
+FROM SC;
+
+select top 3 sno Sno from sc
+
+SELECT Sname,Sage 
+	     FROM    Student    
+	     WHERE Sage <= 18;
+
+SELECT Sname,Sage 
+	     FROM    Student 
+	     WHERE NOT Sage > 18;  
+
+SELECT Sname,Sdept,Sage
+FROM   Student
+WHERE Sage BETWEEN 20 AND 23; 
+
+SELECT Sname,Ssex
+	FROM  Student
+	WHERE Sdept IN ( 'IS','MA','CS' );
+
+SELECT Sname,Ssex
+FROM Student
+	        WHERE Sdept NOT IN ( 'IS','MA','CS' );
+
+SELECT *    
+FROM  Student  
+WHERE  Sno LIKE '12342';
+
+SELECT  * 
+       FROM  Student 
+       WHERE Sno = '12342';
+
+SELECT Sname,Sno,Ssex
+FROM Student
+WHERE  Sname LIKE 'W%';
+
+SELECT Sname
+FROM   Student
+WHERE  Sname LIKE 'W_ _';
+
+SELECT Sname,Sno
+      FROM Student
+      WHERE Sname LIKE 'L_b';
+
+SELECT Sname,Sno
+      FROM Student
+      WHERE Sname LIKE 'L%b';
+
+SELECT Sname,Sno,Ssex
+      FROM Student
+      WHERE Sname NOT LIKE 'W%';
+
+SELECT Cno,Credit
+		FROM Course
+		WHERE Cname LIKE 'computer science and media' ;
+
+SELECT *
+      FROM   Course
+      WHERE  Cname LIKE  'DB\_%i_ _' ESCAPE '\';
+
+SELECT *
+      FROM SC
+      WHERE Grade IS NULL;
+
+SELECT Sno,Cno
+     FROM  SC
+     WHERE  Grade IS NOT NULL;
+
+SELECT Sname
+       FROM  Student
+       WHERE Sdept= 'computer science' AND Sage<19;
+
+SELECT Sname,Ssex
+FROM Student
+WHERE Sdept IN ( 'computer science', 'finance', 'politics' );
+
+SELECT Sname,Ssex
+FROM   Student
+WHERE  Sdept= 'computer science' OR Sdept= 'finance' OR Sdept= 'politics';
+
+SELECT Sname,Sdept,Sage
+FROM Student
+WHERE Sage BETWEEN 20 AND 23;
+
+SELECT Sname,Sdept,Sage
+FROM Student
+WHERE  Sage>=20 AND Sage<=23;
+
+SELECT Sno,Grade
+FROM  SC
+WHERE  Cno= '0007'
+ORDER BY Grade DESC; 
+
+SELECT  *
+FROM  Student
+ORDER BY Sdept ASC,Sage DESC; 
+
+SELECT COUNT(*)
+FROM  SC;
+
+SELECT COUNT(DISTINCT Sno)
+FROM SC;
+
+SELECT AVG(Grade)
+FROM SC
+WHERE Cno= '0007';
+
+SELECT max(Grade)
+FROM SC
+WHERE Cno= '0007';
+
+SELECT Cno,COUNT(Sno) 
+FROM    SC
+GROUP BY Cno;
+
+SELECT Cno,COUNT(Sno) 
+FROM    SC
+GROUP BY Cno
+HAVING COUNT(Sno) >1;     
+
+SELECT  Sno
+FROM   SC
+GROUP BY Sno
+HAVING COUNT(*)>=1;                  
+
+SELECT  Sno into #sc1
+FROM   SC
+GROUP BY Sno
+HAVING COUNT(sno)>=2;
+
+SELECT  Sno,COUNT(*) HYKB into cour
+FROM   SC
+WHERE Grade>=90
+GROUP BY Sno
+HAVING COUNT(*)>=1;      
+
+            
+--Query the names of all students who have taken course c2 and scored above 80 pointsselect sname
+from student 
+where sno in
+(
+select sno
+from sc
+where cno=0007 and grade >80
+)
+-- Find students who study in the same department as "Rose".
+select *
+from student
+where sdept =
+(
+select sdept
+from student
+where sname ='Lily'
+)
+-- Query the student ID and name of the student who has taken the course named "calculus"
+select sno,sname
+from student
+where sno=
+(
+select sno
+from sc
+where cno=(
+select cno
+from course
+where cname=’calculus '
+)
+)
+-- Query the names and ages of students in other departments who are younger than a student in the computer science Department.
+select sname,sage
+from student
+where sage<any
+(
+select sage
+from student
+where sdept='computer science'
+)
+and sdept<>'computer science'
+-- Query the names and ages of students in other departments who are younger than all students in the Information Department.
+select sname,sage
+from student
+where sage<all
+(
+select sage
+from student 
+where sdept='computer science'
+)
+and sdept <>'computer science'
+-- Query the names of all students who have taken course c1. (Realized using join query, correlated subquery, and uncorrelated subquery respectively)
+-- join query
+select sno
+from sc
+where cno=0007
+
+select sname
+from student
+where sno=12344 or sno=12346
+-- correlated subquery 
+select sname
+from student
+where exists
+(
+select sno
+from sc
+where sno=student.sno and cno=0007
+)
+-- uncorrelated subquery 
+
+select sname
+from student
+where sno in
+(
+select sno
+from sc 
+where cno = 0007
+)
+-- Query the names of students who have not taken course c1. (Realized using join query, correlated subquery, and uncorrelated subquery respectively)
+-- join query
+select sno
+from sc
+where cno=0007
+
+select sname
+from student
+where sno<>12344 and sno<>12346
+-- correlated subquery
+select sname
+from student
+where not exists
+(
+select sno
+from sc
+where sno=student.sno and cno=0007
+)
+-- uncorrelated subquery
+select sname
+from student 
+where sno not in
+(
+select sno
+from sc
+where cno=0007
+)
+-- Query students who are in the Department of Computer Science and are not older than 19 years old. (Use congregation operations)
+select *
+from student
+where sdept='computer science' and sage<=19
+
